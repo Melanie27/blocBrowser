@@ -21,6 +21,8 @@
 @property(nonatomic, strong) UIButton *stopButton;
 @property(nonatomic, strong) UIButton *reloadButton;
 
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+
 @end
 
 @implementation ViewController
@@ -98,6 +100,11 @@
     // Do any additional setup after loading the view, typically from a nib.
     //opt out of the behavior where apps scroll content under the nav bar
     self.edgesForExtendedLayout = UIRectEdgeNone;
+    
+    //spinner
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    
 }
 
 //give new webview a size
@@ -156,6 +163,16 @@
 }
 
 #pragma mark - WKNavigationDelegate
+
+- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
+    [self updateButtonsAndTitle];
+}
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    [self updateButtonsAndTitle];
+}
+
+
 //call these if the page fails to load
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *) navigation withError:(NSError *)error {
     [self webView:webView didFailNavigation:navigation withError:error];
@@ -175,11 +192,34 @@
         
         [self presentViewController:alert animated:YES completion:nil];
     }
+    
+    [self updateButtonsAndTitle];
 }
 
 
+#pragma mark - Misc
 
-
+-(void) updateButtonsAndTitle {
+    NSString *webpageTitle = [self.webView.title copy];
+    if ([webpageTitle length]) {
+        self.title = webpageTitle;
+    } else {
+        self.title = self.webView.URL.absoluteString;
+    }
+    
+    //spinner
+    if(self.webView.isLoading) {
+        [self.activityIndicator startAnimating];
+    } else {
+        [self.activityIndicator stopAnimating];
+    }
+    
+    //forward and back buttons
+    self.backButton.enabled = [self.webView canGoBack];
+    self.forwardButton.enabled = [self.webView canGoForward];
+    self.stopButton.enabled = self.webView.isLoading;
+    self.reloadButton.enabled = !self.webView.isLoading;
+}
 
 
 @end
