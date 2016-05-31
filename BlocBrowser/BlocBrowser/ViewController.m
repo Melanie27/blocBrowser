@@ -93,6 +93,22 @@
     }
     
     self.view = mainView;
+    
+    
+    //welcome
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Welcome Alert"
+                                                                   message:@"This is the welcome alert."
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    //so we can pass the alert into the app
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    
+    [alert addAction:defaultAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+    
+    
 }
 
 - (void)viewDidLoad {
