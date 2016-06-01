@@ -145,8 +145,8 @@
     [textField resignFirstResponder];
     
     NSString *URLString = textField.text;
-    NSRange whiteSpaceRange = [URLString rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
-    NSString *replaceSpace = [URLString stringByReplacingCharactersInRange:whiteSpaceRange withString:@"+"];
+    NSRange whiteSpace = [URLString rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *replaceSpace = [URLString stringByReplacingCharactersInRange:whiteSpace withString:@"+"];
     
     NSURL *URL = [NSURL URLWithString: URLString];
     
@@ -158,11 +158,11 @@
     //test if there is white space and then load google
     if (whiteSpace.location != NSNotFound) {
         NSMutableString *queryString = [@"google.com/search?q=" mutableCopy];
-        URL = [NSURL URLWithString:[NSMutableString stringWithFormat:@"http://%@", queryString]];
         //NSRange whiteSpaceRange = [queryString rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
+        [queryString appendString:replaceSpace];
         NSLog(@"%@", queryString);
         NSLog(@"%@", replaceSpace);
-        [queryString apppendString:URL];
+        URL = [NSURL URLWithString:[NSMutableString stringWithFormat:@"http://%@", queryString]];
     }
     
     if(URL) {
