@@ -14,6 +14,7 @@
 		9B51AA0B1CF7C28F0078CDA4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B51AA091CF7C28F0078CDA4 /* LaunchScreen.storyboard */; };
 		9B51AA161CF7C28F0078CDA4 /* BlocBrowserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51AA151CF7C28F0078CDA4 /* BlocBrowserTests.m */; };
 		9B51AA211CF7C28F0078CDA4 /* BlocBrowserUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51AA201CF7C28F0078CDA4 /* BlocBrowserUITests.m */; };
+		9B51AA301CFE1C410078CDA4 /* AwesomeFloatingToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51AA2F1CFE1C410078CDA4 /* AwesomeFloatingToolbar.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,8 @@
 		9B51AA1C1CF7C28F0078CDA4 /* BlocBrowserUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlocBrowserUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B51AA201CF7C28F0078CDA4 /* BlocBrowserUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlocBrowserUITests.m; sourceTree = "<group>"; };
 		9B51AA221CF7C28F0078CDA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9B51AA2E1CFE1C410078CDA4 /* AwesomeFloatingToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomeFloatingToolbar.h; sourceTree = "<group>"; };
+		9B51AA2F1CFE1C410078CDA4 /* AwesomeFloatingToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeFloatingToolbar.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +106,8 @@
 				9B51A9FF1CF7C28F0078CDA4 /* AppDelegate.m */,
 				9B51AA011CF7C28F0078CDA4 /* ViewController.h */,
 				9B51AA021CF7C28F0078CDA4 /* ViewController.m */,
+				9B51AA2E1CFE1C410078CDA4 /* AwesomeFloatingToolbar.h */,
+				9B51AA2F1CFE1C410078CDA4 /* AwesomeFloatingToolbar.m */,
 				9B51AA071CF7C28F0078CDA4 /* Assets.xcassets */,
 				9B51AA091CF7C28F0078CDA4 /* LaunchScreen.storyboard */,
 				9B51AA0C1CF7C28F0078CDA4 /* Info.plist */,
@@ -269,6 +274,7 @@
 				9B51AA031CF7C28F0078CDA4 /* ViewController.m in Sources */,
 				9B51AA001CF7C28F0078CDA4 /* AppDelegate.m in Sources */,
 				9B51A9FD1CF7C28F0078CDA4 /* main.m in Sources */,
+				9B51AA301CFE1C410078CDA4 /* AwesomeFloatingToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
