@@ -77,7 +77,7 @@
     return self;
 }
 
-//layout the 4 lables in a 2x2 grid
+//layout the 4 labels in a 2x2 grid
 //layout subview will get called any time a view's frame changes
 //code loops though the array of labels and sets the correct origin point and size
 
@@ -87,8 +87,8 @@
     for (UILabel *thisLabel in self.labels) {
         NSUInteger currentLabelIndex =[self.labels indexOfObject:thisLabel];
         
-        CGFloat labelHeight = CGRectGetHeight(self.bounds) / 2;
-        CGFloat labelWidth = CGRectGetWidth(self.bounds) / 2;
+        CGFloat labelHeight = CGRectGetHeight(self.bounds) / 4;
+        CGFloat labelWidth = CGRectGetWidth(self.bounds) / 3;
         CGFloat labelX = 0;
         CGFloat labelY = 0;
         

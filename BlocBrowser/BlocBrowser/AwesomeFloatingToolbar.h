@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 //include this line as a promise to the compiler that it will learn what an awesomefloating toolbar is later
+
+
+
 @class AwesomeFloatingToolbar;
 
 //this line indicates that the definition to AwesomeFloatingToolbarDelegate is beginning. indicates that the protocol inherits from NSOBject protocol
