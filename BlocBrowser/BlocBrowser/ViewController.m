@@ -145,6 +145,8 @@
     [textField resignFirstResponder];
     
     NSString *URLString = textField.text;
+    NSRange whiteSpaceRange = [URLString rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *replaceSpace = [URLString stringByReplacingCharactersInRange:whiteSpaceRange withString:@"+"];
     
     NSURL *URL = [NSURL URLWithString: URLString];
     
@@ -152,11 +154,24 @@
         //the user didn't type http: or https:
         URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@", URLString]];
     }
+   
+    //test if there is white space and then load google
+    if (whiteSpace.location != NSNotFound) {
+        NSMutableString *queryString = [@"google.com/search?q=" mutableCopy];
+        URL = [NSURL URLWithString:[NSMutableString stringWithFormat:@"http://%@", queryString]];
+        //NSRange whiteSpaceRange = [queryString rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSLog(@"%@", queryString);
+        NSLog(@"%@", replaceSpace);
+        [queryString apppendString:URL];
+    }
     
     if(URL) {
         NSURLRequest *request = [NSURLRequest requestWithURL:URL];
         [self.webView loadRequest:request];
     }
+   
+    
+
     
     return NO;
     
