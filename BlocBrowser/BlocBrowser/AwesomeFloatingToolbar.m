@@ -14,8 +14,10 @@
 @property (nonatomic, strong) NSArray *currentTitles;
 @property (nonatomic, strong) NSArray *colors;
 @property (nonatomic, strong) NSArray *labels;
-
 @property (nonatomic, weak) UILabel *currentLabel;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
+@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
+
 
 
 
@@ -72,10 +74,75 @@
         for (UILabel *thisLabel in self.labels) {
             [self addSubview:thisLabel];
         }
+        
+        // #1 - tells gesture recognizer which method to call when the tap is detected
+        self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
+        
+        // #2 tells the view (self) to route touch events through this gesture recognizer
+        [self addGestureRecognizer:self.tapGesture];
+        
+        //create and initialize pan gesture
+        self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panFired:)];
+        [self addGestureRecognizer:self.panGesture];
     }
     
     return self;
 }
+
+//implement tapFired method
+
+//3 checks for the proper state
+//4 calculates and stores an x-y coordinate of the gesture's location with respect to self's bounds - tap in top left will register (0,0)
+//5 invokes hitTest:withEvent to determine which view received the tap
+//6 check if the view that was tapped was one of the toolbar labels, if so verify delegate for compatibility before the method call
+
+//we care where the gesture occurred
+
+-(void) tapFired:(UITapGestureRecognizer *) recognizer {
+    if (recognizer.state == UIGestureRecognizerStateRecognized) {  //#3
+        CGPoint location = [recognizer locationInView:self]; //#4
+        UIView *tappedView = [self hitTest:location withEvent:nil]; //5
+        
+        if([self.labels containsObject:tappedView]) { //#6
+            if ([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
+                [self.delegate floatingToolbar:self didSelectButtonWithTitle:((UILabel *)tappedView).text];
+            }
+        }
+    }
+}
+
+// we care what direction the gesture is going in
+//translation is how far the user's finger has moved in each direction since touch event began
+//implement panFired method
+
+-(void) panFired:(UIPanGestureRecognizer *) recognizer {
+    if (recognizer.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [recognizer translationInView:self];
+        
+        NSLog(@"New translation: %@", NSStringFromCGPoint(translation));
+        
+        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPanWithOffset:)]) {
+            [self.delegate floatingToolbar:self didTryToPanWithOffset:translation];
+        }
+        
+        [recognizer setTranslation:CGPointZero inView:self];
+    }
+}
+
+- (void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didTryToPanWithOffset:(CGPoint)offset {
+    CGPoint startingPoint = toolbar.frame.origin;
+    CGPoint newPoint = CGPointMake(startingPoint.x + offset.x, startingPoint.y + offset.y);
+    
+    CGRect potentialNewFrame = CGRectMake(newPoint.x, newPoint.y, CGRectGetWidth(toolbar.frame), CGRectGetHeight(toolbar.frame));
+    
+    if (CGRectContainsRect(self.view.bounds, potentialNewFrame)) {
+        toolbar.frame = potentialNewFrame;
+    }
+}
+
+
+
+
 
 //layout the 4 lables in a 2x2 grid
 //layout subview will get called any time a view's frame changes
@@ -130,53 +197,8 @@
 
 }
 
-//when touch begins, dim the label
--(void)touchesBegan:(NSSet *) touches withEvent: (UIEvent *)event {
-    UILabel *label = [self labelFromTouches:touches withEvent:event];
-    
-    self.currentLabel = label;
-    self.currentLabel.alpha = 0.5;
-}
 
 
-//when touch moves, check if user is still touching the same label and change alpha accordingly
--(void)touchesMoved:(NSSet *) touches withEvent: (UIEvent *) event {
-    UILabel *label = [self labelFromTouches:touches withEvent:event];
-    
-    if(self.currentLabel != label) {
-        //the label being touched is no longer the initial label
-        self.currentLabel.alpha = 1;
-    } else {
-        //label being touched is the initial label
-        self.currentLabel.alpha = .5;
-    }
-}
-
-
-//when user lifts finger touch has ended. check if finger was lifted from initial label or not and reset variables
-
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    UILabel *label = [self labelFromTouches:touches withEvent:event];
-    
-    if (self.currentLabel == label) {
-        NSLog(@"Label tapped: %@", self.currentLabel.text);
-        
-        if([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
-            [self.delegate floatingToolbar:self didSelectButtonWithTitle: self.currentLabel.text];
-        }
-    }
-    
-    self.currentLabel.alpha = 1;
-    self.currentLabel = nil;
-
-}
-
-//if touch is canceled (by a phone call or something) reset the variables
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    self.currentLabel.alpha = 1;
-    self.currentLabel = nil;
-}
 
 #pragma mark -- Button Enabling
 

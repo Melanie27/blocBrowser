@@ -20,6 +20,9 @@
 
 -(void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didSelectButtonWithTitle:(NSString *)title;
 
+//new delegate method to protocol that indicates the toolbar wants to move around
+-(void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didTryToPanWithOffset:(CGPoint)offset;
+
 @end
 
 //ends definition of the delegate protocol
