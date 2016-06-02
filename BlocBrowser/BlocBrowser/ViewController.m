@@ -206,14 +206,26 @@
 }
 
 - (void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didTryToPanWithOffset:(CGPoint)offset {
+    //get top-left corner of where the toolbar is currently located
     CGPoint startingPoint = toolbar.frame.origin;
+    //store the future top-left corner by adding difference in x and difference in y to original top-left
     CGPoint newPoint = CGPointMake(startingPoint.x + offset.x, startingPoint.y + offset.y);
-    
+    //create a potential new CGRect - must make sure it is inside the bounds of the screen
     CGRect potentialNewFrame = CGRectMake(newPoint.x, newPoint.y, CGRectGetWidth(toolbar.frame), CGRectGetHeight(toolbar.frame));
     
     if (CGRectContainsRect(self.view.bounds, potentialNewFrame)) {
         toolbar.frame = potentialNewFrame;
     }
+}
+
+-(void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didPinchWithScale:(CGFloat)scale {
+    //get the original scale
+    CGRect frame = [self.view frame];
+    frame.size.width = frame.size.width * scale;
+    [self.view setFrame:frame];
+    
+    NSLog(@"Scale is %f", scale);
+    
 }
 
 

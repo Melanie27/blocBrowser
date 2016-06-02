@@ -23,6 +23,9 @@
 //new delegate method to protocol that indicates the toolbar wants to move around
 -(void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didTryToPanWithOffset:(CGPoint)offset;
 
+//new delegate method protocol that inidcates the toolbar is being pinched
+-(void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didPinchWithScale:(CGFloat)scale;
+
 @end
 
 //ends definition of the delegate protocol
