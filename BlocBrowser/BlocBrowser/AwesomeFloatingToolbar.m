@@ -18,6 +18,7 @@
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGesture;
 
 
 
@@ -89,6 +90,10 @@
         //create and initialize pinch gesture
         self.pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchFired:)];
         [self addGestureRecognizer:self.pinchGesture];
+        
+        //create and initialize longpress gesture
+        self.longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFired:)];
+        [self addGestureRecognizer:self.longPressGesture];
     }
     
     return self;
@@ -137,22 +142,42 @@
 //implement pinch
 
 -(void) pinchFired:(UIPinchGestureRecognizer *) recognizer {
+    CGFloat scale = [recognizer scale];
+    
     if (recognizer.state == UIGestureRecognizerStateChanged) {
-        CGFloat scale = [recognizer scale];
+        
         if ([self.delegate respondsToSelector:@selector(floatingToolbar:didPinchWithScale:)]) {
             [self.delegate floatingToolbar:self didPinchWithScale:scale];
         }
         
         //can we talk about setScale?
-        [recognizer setScale:scale];
-        //recognizer.scale = 1;
+        //[recognizer setScale:scale];
+        recognizer.scale = 1;
         NSLog(@"%f", recognizer.scale);
         
     }
 }
 
+//implement longpress gesture recognizer that rotates the background colors when fired
 
+-(void) longPressFired:(UILongPressGestureRecognizer *)recognizer
+{
+    
+    NSTimer *longPressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(floatingToolbar:changeLabelColors:) userInfo:nil repeats:YES];
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        NSLog(@"Long Press Began");
 
+        [longPressTimer fire];
+    }
+    
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        
+        NSLog(@"Long Press Ended");
+        longPressTimer = nil;
+        
+    }
+}
 
 
 

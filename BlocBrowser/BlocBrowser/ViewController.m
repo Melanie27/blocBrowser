@@ -228,5 +228,8 @@
     
 }
 
+-(void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar changeLabelColors:(CFTimeInterval)time {
+    
+}
 
 @end
