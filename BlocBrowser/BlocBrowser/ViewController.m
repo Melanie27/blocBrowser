@@ -95,7 +95,8 @@
     self.textField.frame = CGRectMake (0,0,width, itemHeight);
     self.webView.frame = CGRectMake(0, CGRectGetMaxY(self.textField.frame), width, browserHeight);
     
-    self.awesomeToolbar.frame = CGRectMake(20, 100, 280, 60);
+//    self.awesomeToolbar.frame = CGRectMake(20, 100, 280, 60);
+    self.awesomeToolbar.frame = CGRectMake(40, 30, 300, 100);
 }
 
 #pragma mark - AweseomFloatingToolbarDelegate
@@ -220,16 +221,20 @@
 
 -(void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didPinchWithScale:(CGFloat)scale {
     //get the original scale
-    CGRect frame = [self.view frame];
-    frame.size.width = frame.size.width * scale;
-    [self.view setFrame:frame];
+    CGRect frame = [toolbar frame];
+//    frame.size.width = frame.size.width * scale;
+//    [toolbar setFrame:frame];
     
-    NSLog(@"Scale is %f", scale);
+    
+    
+    
+    NSLog(@"Scale is %f, width %f", scale, frame.size.width);
     
 }
 
--(void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar changeLabelColors:(CFTimeInterval)time {
-    
+-(void) floatingToolbarDidLongPress:(AwesomeFloatingToolbar *)toolbar
+{
+    [toolbar rotateColors];
 }
 
 @end

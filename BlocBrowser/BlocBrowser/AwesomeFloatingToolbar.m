@@ -13,8 +13,9 @@
 
 @property (nonatomic, strong) NSArray *currentTitles;
 @property (nonatomic, strong) NSArray *colors;
-@property (nonatomic, strong) NSArray *labels;
+@property (nonatomic, strong) NSArray<UILabel*> *labels;
 @property (nonatomic, weak) UILabel *currentLabel;
+
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
@@ -46,7 +47,8 @@
                         ];
         
         NSMutableArray *labelsArray = [[NSMutableArray alloc] init];
-        
+        self.colorOffset = 0;
+
         //Make the 4 labels
         for (NSString *currentTitle in self.currentTitles) {
             UILabel *label = [[UILabel alloc] init];
@@ -60,12 +62,15 @@
             NSString *titleForThisLabel = [self.currentTitles objectAtIndex:currentTitleIndex];
             
             //class that represents color and sometimes opacity
+            /*
             UIColor *colorForThisLabel = [self.colors objectAtIndex:currentTitleIndex];
+            label.backgroundColor = colorForThisLabel;
+             */
+            
             
             label.textAlignment = NSTextAlignmentCenter;
             label.font = [UIFont systemFontOfSize:10];
             label.text = titleForThisLabel;
-            label.backgroundColor = colorForThisLabel;
             label.textColor = [UIColor whiteColor];
             
             [labelsArray addObject:label];
@@ -76,6 +81,8 @@
         for (UILabel *thisLabel in self.labels) {
             [self addSubview:thisLabel];
         }
+        
+        [self setColorsFromOffset];
         
         // #1 - tells gesture recognizer which method to call when the tap is detected
         self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
@@ -97,6 +104,16 @@
     }
     
     return self;
+}
+
+
+-(void)setColorsFromOffset {
+    for (NSInteger i = 0; i<self.labels.count; i++) {
+        UIColor *colorForThisLabel = self.colors[(i+self.colorOffset)%self.colors.count];
+        
+        self.labels[i].backgroundColor = colorForThisLabel;
+        NSLog(@"Setting color for %ld",i);
+    }
 }
 
 //implement tapFired method
@@ -142,7 +159,20 @@
 //implement pinch
 
 -(void) pinchFired:(UIPinchGestureRecognizer *) recognizer {
-    CGFloat scale = [recognizer scale];
+    CGFloat scale = recognizer.scale;
+    
+    
+    /*if (recognizer.state == UIGestureRecognizerStateBegan) {
+        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didPinchWithScale:)]) {
+            [self.delegate floatingToolbar:self didPinchWithScale:scale];
+        }
+        
+        recognizer.scale = 1;
+        NSLog(@"%f", recognizer.scale);
+    }*/
+    
+    
+    
     
     if (recognizer.state == UIGestureRecognizerStateChanged) {
         
@@ -153,7 +183,7 @@
         //can we talk about setScale?
         //[recognizer setScale:scale];
         recognizer.scale = 1;
-        NSLog(@"%f", recognizer.scale);
+        NSLog(@" test, %f", recognizer.scale);
         
     }
 }
@@ -163,20 +193,24 @@
 -(void) longPressFired:(UILongPressGestureRecognizer *)recognizer
 {
     
-    NSTimer *longPressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(floatingToolbar:changeLabelColors:) userInfo:nil repeats:YES];
+   
     
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         NSLog(@"Long Press Began");
-
-        [longPressTimer fire];
+        
+        if ([self.delegate respondsToSelector:@selector(floatingToolbarDidLongPress:)]) {
+            [self.delegate floatingToolbarDidLongPress:self];
+        }
+        
+        //[longPressTimer fire];
     }
     
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
+    /*if (recognizer.state == UIGestureRecognizerStateEnded) {
         
         NSLog(@"Long Press Ended");
         longPressTimer = nil;
         
-    }
+    }*/
 }
 
 
@@ -235,7 +269,21 @@
 
 }
 
-
+-(void) rotateColors {
+    /*
+    NSArray *colors = @[@"red",@"blue",@"green",@"yellow"];
+    for (NSInteger offset = 0; offset <= 10; offset++) {
+    
+    NSLog(@"1: %@  2: %@  3: %@  4: %@",
+          colors[(0+offset)%4],
+          colors[(1+offset)%4],
+          colors[(2+offset)%4],
+          colors[(3+offset)%4]);
+    }
+     */
+    self.colorOffset++;
+    [self setColorsFromOffset];
+}
 
 
 #pragma mark -- Button Enabling

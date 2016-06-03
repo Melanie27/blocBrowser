@@ -26,6 +26,9 @@
 //new delegate method protocol that inidcates the toolbar is being pinched
 -(void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didPinchWithScale:(CGFloat)scale;
 
+-(void) floatingToolbarDidLongPress:(AwesomeFloatingToolbar *)toolbar;
+
+
 @end
 
 //ends definition of the delegate protocol
@@ -40,7 +43,11 @@
 //a method that enables or disables a button based on the title passed in
 -(void) setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title;
 
+//change colors
+-(void)rotateColors;
+
 //a delegate property to use if a delegate is desired
 @property (nonatomic, weak) id <AwesomeFloatingToolbarDelegate> delegate;
+@property (nonatomic, assign) NSInteger colorOffset;
 
 @end
