@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSArray *currentTitles;
 @property (nonatomic, strong) NSArray *colors;
 @property (nonatomic, strong) NSArray<UILabel*> *labels;
+@property (nonatomic, strong) NSArray<UIButton*> *buttons;
 @property (nonatomic, weak) UILabel *currentLabel;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
@@ -85,10 +86,10 @@
         [self setColorsFromOffset];
         
         // #1 - tells gesture recognizer which method to call when the tap is detected
-        self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
+        //self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
         
         // #2 tells the view (self) to route touch events through this gesture recognizer
-        [self addGestureRecognizer:self.tapGesture];
+        //[self addGestureRecognizer:self.tapGesture];
         
         //create and initialize pan gesture
         self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panFired:)];
@@ -123,9 +124,47 @@
 //5 invokes hitTest:withEvent to determine which view received the tap
 //6 check if the view that was tapped was one of the toolbar labels, if so verify delegate for compatibility before the method call
 
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UILabel *label = [self labelFromTouches:touches withEvent:event];
+    
+    self.currentLabel = label;
+    self.currentLabel.alpha = 0.5;
+    NSLog(@"hi");
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    UILabel *label = [self labelFromTouches:touches withEvent:event];
+    
+    if (self.currentLabel != label) {
+        // The label being touched is no longer the initial label
+        self.currentLabel.alpha = 1;
+    } else {
+        // The label being touched is the initial label
+        self.currentLabel.alpha = 0.5;
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    UILabel *label = [self labelFromTouches:touches withEvent:event];
+    
+    if (self.currentLabel == label) {
+        NSLog(@"Label tapped: %@", self.currentLabel.text);
+        
+        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
+            [self.delegate floatingToolbar:self didSelectButtonWithTitle:self.currentLabel.text];
+        }
+    }
+    
+    self.currentLabel.alpha = 1;
+    self.currentLabel = nil;
+    NSLog(@"ended");
+}
+
+
 //we care where the gesture occurred
 
--(void) tapFired:(UITapGestureRecognizer *) recognizer {
+/*-(void) tapFired:(UITapGestureRecognizer *) recognizer {
     if (recognizer.state == UIGestureRecognizerStateRecognized) {  //#3
         CGPoint location = [recognizer locationInView:self]; //#4
         UIView *tappedView = [self hitTest:location withEvent:nil]; //5
@@ -136,7 +175,7 @@
             }
         }
     }
-}
+}*/
 
 // we care what direction the gesture is going in
 //translation is how far the user's finger has moved in each direction since touch event began
