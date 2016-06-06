@@ -286,6 +286,11 @@
 }
 
 
+-(void)scaleBy:(CGFloat)scale {
+    self.transform = CGAffineTransformScale(self.transform, scale, scale);
+}
+
+
 #pragma mark -- Button Enabling
 
 -(void) setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title {
