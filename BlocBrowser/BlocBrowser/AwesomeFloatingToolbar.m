@@ -13,9 +13,9 @@
 
 @property (nonatomic, strong) NSArray *currentTitles;
 @property (nonatomic, strong) NSArray *colors;
-@property (nonatomic, strong) NSArray<UILabel*> *labels;
+//@property (nonatomic, strong) NSArray<UILabel*> *labels;
 @property (nonatomic, strong) NSArray<UIButton*> *buttons;
-@property (nonatomic, weak) UILabel *currentLabel;
+//@property (nonatomic, weak) UILabel *currentLabel;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
@@ -86,10 +86,10 @@
         [self setColorsFromOffset];
         
         // #1 - tells gesture recognizer which method to call when the tap is detected
-        //self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
+        self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
         
         // #2 tells the view (self) to route touch events through this gesture recognizer
-        //[self addGestureRecognizer:self.tapGesture];
+        [self addGestureRecognizer:self.tapGesture];
         
         //create and initialize pan gesture
         self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panFired:)];
