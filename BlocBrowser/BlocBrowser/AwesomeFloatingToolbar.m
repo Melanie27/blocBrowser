@@ -13,9 +13,8 @@
 
 @property (nonatomic, strong) NSArray *currentTitles;
 @property (nonatomic, strong) NSArray *colors;
-//@property (nonatomic, strong) NSArray<UILabel*> *labels;
-@property (nonatomic, strong) NSArray<UIButton*> *buttons;
-//@property (nonatomic, weak) UILabel *currentLabel;
+@property (nonatomic, strong) NSArray<UILabel*> *labels;
+@property (nonatomic, weak) UILabel *currentLabel;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
@@ -232,8 +231,6 @@
 -(void) longPressFired:(UILongPressGestureRecognizer *)recognizer
 {
     
-   
-    
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         NSLog(@"Long Press Began");
         
@@ -290,6 +287,18 @@
     }
 }
 
+#pragma mark - Button Enabling
+
+- (void) setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title {
+    NSUInteger index = [self.currentTitles indexOfObject:title];
+    
+    if (index != NSNotFound) {
+        UILabel *label = [self.labels objectAtIndex:index];
+        label.userInteractionEnabled = enabled;
+        label.alpha = enabled ? 1.0 : 0.25;
+    }
+}
+
 
 #pragma mark - Touch Handling
 
@@ -309,7 +318,7 @@
 }
 
 -(void) rotateColors {
-    /*
+    
     NSArray *colors = @[@"red",@"blue",@"green",@"yellow"];
     for (NSInteger offset = 0; offset <= 10; offset++) {
     
@@ -319,22 +328,15 @@
           colors[(2+offset)%4],
           colors[(3+offset)%4]);
     }
-     */
+     
     self.colorOffset++;
     [self setColorsFromOffset];
 }
 
-
-#pragma mark -- Button Enabling
-
--(void) setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title {
-    NSUInteger index = [self.currentTitles indexOfObject:title];
-    
-    if (index != NSNotFound) {
-        UILabel *label = [self.labels objectAtIndex:index];
-        label.userInteractionEnabled = enabled;
-        label.alpha = enabled? 1.0 : .25;
-    }
+-(void)scaleBy:(CGFloat)scale {
+    self.transform = CGAffineTransformScale(self.transform, scale, scale);
 }
+
+
 
 @end

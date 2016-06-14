@@ -75,6 +75,8 @@
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     
+    self.awesomeToolbar.frame = CGRectMake(40, 30, 300, 100);
+    
 }
 
 //give new webview a size
@@ -95,8 +97,6 @@
     self.textField.frame = CGRectMake (0,0,width, itemHeight);
     self.webView.frame = CGRectMake(0, CGRectGetMaxY(self.textField.frame), width, browserHeight);
     
-//    self.awesomeToolbar.frame = CGRectMake(20, 100, 280, 60);
-    self.awesomeToolbar.frame = CGRectMake(40, 30, 300, 100);
 }
 
 #pragma mark - AweseomFloatingToolbarDelegate
@@ -222,18 +222,18 @@
 -(void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didPinchWithScale:(CGFloat)scale {
     //get the original scale
     CGRect frame = [toolbar frame];
-//    frame.size.width = frame.size.width * scale;
-//    [toolbar setFrame:frame];
-    
-    
-    
-    
-    NSLog(@"Scale is %f, width %f", scale, frame.size.width);
+    frame.size.width = frame.size.width * scale;
+        frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width*scale, frame.size.height*scale);
+        //prevent frame from getting to big or too small
+        if (1) {
+        // if (CGRectContainsRect(self.view.bounds, frame) && frame.size.width > 50) {
+        [toolbar scaleBy:scale];
+        NSLog(@"Scale is %f, width %f", scale, toolbar.frame.size.width);
+        }
     
 }
 
--(void) floatingToolbarDidLongPress:(AwesomeFloatingToolbar *)toolbar
-{
+-(void) floatingToolbarDidLongPress:(AwesomeFloatingToolbar *)toolbar {
     [toolbar rotateColors];
 }
 

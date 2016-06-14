@@ -43,6 +43,9 @@
 //a method that enables or disables a button based on the title passed in
 -(void) setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title;
 
+//scale toolbar
+-(void)scaleBy:(CGFloat)scale;
+
 //change colors
 -(void)rotateColors;
 
